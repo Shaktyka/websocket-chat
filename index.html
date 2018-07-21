@@ -23,16 +23,24 @@
   padding-top: 20px;
 }
     
-.controls__clean {
+.control {
   box-sizing: border-box;
   min-width: 50px;
   padding: 10px;
-  background-color: transparent;
   color: #902046;
   font-size: 14px;
   border: 2px solid #902046;
   border-radius: 5px;
   cursor: pointer;
+}
+    
+.controls__colors-wrap {
+  margin-right: 20px;      
+}
+    
+.controls__clean {
+  background-color: transparent;
+  color: #902046;
 }
     
 .controls__clean:hover {
@@ -91,7 +99,7 @@
   background-color: #902046;
 }
 
-input {
+.chat__inputs input {
   box-sizing: border-box;
   width: 100%;
   padding: 7px 10px;
@@ -127,7 +135,15 @@ input:focus {
 </head>
 <body>
   <div class="controls">
-    <button class="controls__clean" type="button" name="clean">Очистить чат</button>
+   
+   <div class="controls__colors-wrap">
+     <label for="color-pick">Цвет сообщений</label>
+     <input class="controls__color-pick" id="color-pick" type="color" name="color-pick" title="Нажми, чтобы выбрать цвет текста" value="#902046">
+   </div>
+   
+<!--    <button class="controls__color-pick control" type="button" name="color-pick" title="Нажми, чтобы выбрать цвет текста сообщений">Цвет текста</button> -->
+   
+    <button class="controls__clean control" type="button" name="clean">Очистить чат</button>
   </div>
   <section class="chat-container">
     <div class="chat__window" id="chat-window">
@@ -149,6 +165,13 @@ input:focus {
     </div>
   </section>
   <script>
+    var color = '';
+    var colorPicker = document.querySelector('.controls__color-pick');
+    colorPicker.addEventListener('change', function (evt) {
+      color = evt.target.value;
+    }, false);
+  </script>
+  <script>
     var socket = io({transports: ['websocket']});
     var messageContainer = document.querySelector('.chat');
     socket.on('message', function (data) {
@@ -165,11 +188,13 @@ input:focus {
     function renderMessage (data) {
       var div = document.createElement('div');
       div.innerHTML = '<span><strong>' + data.nickname + ':</strong> ' + data.message + '</span>';
+      div.style.color = color;
       messageContainer.insertBefore(div, messageContainer.firstChild);
 //      document.querySelector('.chat__greeting').style.display = 'none';
     };
   </script>
   <script>
+    // Очистка чата при нажатии кнопки
     var clean = document.querySelector('.controls__clean');
     clean.addEventListener('click', function () {
       messageContainer.innerHTML = '';
