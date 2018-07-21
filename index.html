@@ -31,11 +31,14 @@
   font-size: 14px;
   border: 2px solid #902046;
   border-radius: 5px;
+  background-color: transparent;
+  text-transform: uppercase;
   cursor: pointer;
 }
     
 label {
   font-family: "Arial", sans-serif;
+  color: #902046;
 }
     
 .controls__colors-wrap {
@@ -48,11 +51,10 @@ label {
   margin-left: 10px;      
 }
     
-.controls__clean {
-  background-color: transparent;
-  text-transform: uppercase;
+.controls__bg-color {
+  margin-right: 20px;   
 }
-    
+
 .controls__clean:hover {
   background-color: floralwhite;  
 }
@@ -151,7 +153,11 @@ input:focus {
      <input class="controls__color-pick" id="color-pick" type="color" name="color-pick" title="Нажми, чтобы выбрать цвет текста" value="#902046">
    </div>
    
-    <button class="controls__clean control" type="button" name="clean" title="Нажми, чтобы удалить все сообщения">Очистить</button>
+   <div class="controls__buttons-wrapper">
+     <button class="controls__bg-color control" type="button" name="bg-color" title="Нажми, чтобы выбрать цвет фона сайта">Цвет фона</button>
+   
+     <button class="controls__clean control" type="button" name="clean" title="Нажми, чтобы удалить все сообщения">Очистить</button>
+  </div>
     
   </div>
   <section class="chat-container">
@@ -163,10 +169,10 @@ input:focus {
      <form onsubmit="sendMessage(this.nickname.value, this.message.value); this.message.value=''; return false;">
       <div class="chat__inputs">
         <div class="chat__input-nick">
-          <input type="text" name="nickname" placeholder="nickname" autofocus autocomplete="off" maxlength="100">
+          <input type="text" name="nickname" placeholder="Ник" autofocus autocomplete="off" maxlength="100">
         </div>
         <div class="chat__input-text">
-          <input type="text" name="message" placeholder="message" autocomplete="off" maxlength="2000">
+          <input type="text" name="message" placeholder="Сообщение" autocomplete="off" maxlength="2000">
         </div>
         <input class="submit" type="submit">
       </div>
@@ -175,12 +181,14 @@ input:focus {
   </section>
   
   <script>
+    // Цвет сообщения пользователя
     var color = '#902046';
     var colorPicker = document.querySelector('.controls__color-pick');
     colorPicker.addEventListener('change', function (evt) {
       color = evt.target.value;
     }, false);
     
+    // Определение времени отправки сообщения
     var messageTime = '';
     var getMessageTime = function () {
       var date = new Date();
@@ -219,6 +227,26 @@ input:focus {
     clean.addEventListener('click', function () {
       messageContainer.innerHTML = '';
     })
+  </script>
+  
+  <script>
+    // Рандомная смена цвета фона сайта
+    var background = document.querySelector('body');
+    
+    var changeBgColor = document.querySelector('.controls__bg-color');
+    
+    var bgcolors = ['yellow', 'lightblue', 'pink', 'lightgray', 'orange', 'beige', 'violet', 'springgreen', 'black', 'white', 'salmon', 'tomato', 'coral', 'plum', 'lawngreen', 'indianred', 'darkgray', 'goldenrod'];
+    var bgcolor = '';
+    
+    var getRandomElement = function (array) {
+      var randomElement = Math.floor(Math.random() * array.length);
+      return array[randomElement];
+    };
+    
+    changeBgColor.addEventListener('click', function () {
+      bgcolor = getRandomElement(bgcolors);
+      background.style.backgroundColor = bgcolor;
+    });
   </script>
   
 </body>
