@@ -9,18 +9,75 @@
   margin: 0;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 28px;
+  font-size: 20px;
   background-color: pink;
 }
+  
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  width: 80vw;
+  min-height: 50px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+    
+.controls__clean {
+  box-sizing: border-box;
+  min-width: 50px;
+  padding: 10px;
+  background-color: transparent;
+  color: #902046;
+  font-size: 14px;
+  border: 2px solid #902046;
+  border-radius: 5px;
+  cursor: pointer;
+}
+    
+.controls__clean:hover {
+  background-color: floralwhite;  
+}
 
+.chat-container {
+  padding-top: 20px;  
+}
+    
 .chat__window {
-  min-height: 730px;
+  box-sizing: border-box;
+  width: 80vw;
+  min-height: 680px;
+  margin: 0 auto;
+  border: 4px solid #902046;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+    
+.chat {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 620px;
+  padding: 10px;
   background-color: floralwhite;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .chat__greeting {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  background-color: #902046;
+  color: floralwhite;
+  font-family: "Monotype Corsiva", serif;
   text-align: center;
-  border-bottom: 1px solid gray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+    
+.chat__greeting:hover {
+  background-color: crimson;
 }
 
 .chat__panel {
@@ -28,14 +85,25 @@
   bottom: 0;
   left: 0;
   width: 100%;
+  margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
-  background-color: peru;
+  background-color: #902046;
 }
 
 input {
-  font-size: inherit;
+  box-sizing: border-box;
   width: 100%;
+  padding: 7px 10px;
+  background-color: floralwhite;
+  font-size: inherit;
+  border: 2px solid pink;
+  border-radius: 5px;
+}
+    
+input:focus {
+  outline: none;
+  border: 2px solid crimson;
 }
 
 .chat__inputs {
@@ -52,25 +120,28 @@ input {
   flex-grow: 1;
 }
     
-    .submit {
-      display: none;
-    }
+.submit {
+  display: none;
+}
   </style>
-<!--  <link rel="stylesheet" href="style.css">-->
 </head>
 <body>
-  <section class="chat">
+  <div class="controls">
+    <button class="controls__clean" type="button" name="clean">Очистить чат</button>
+  </div>
+  <section class="chat-container">
     <div class="chat__window" id="chat-window">
-      <h2 class="chat__greeting" id="greeting">Добро пожаловать в чат!</h2>
+      <h2 class="chat__greeting" id="greeting">Добро пожаловать в чат для девочек!</h2>
+      <div class="chat"></div>
     </div>
     <div class="chat__panel">
      <form onsubmit="sendMessage(this.nickname.value, this.message.value); this.message.value=''; return false;">
       <div class="chat__inputs">
         <div class="chat__input-nick">
-          <input type="text" name="nickname" placeholder="nickname" autofocus autocomplete="off">
+          <input type="text" name="nickname" placeholder="nickname" autofocus autocomplete="off" maxlength="100">
         </div>
         <div class="chat__input-text">
-          <input type="text" name="message" placeholder="message" autocomplete="off">
+          <input type="text" name="message" placeholder="message" autocomplete="off" maxlength="2000">
         </div>
         <input class="submit" type="submit">
       </div>
@@ -79,7 +150,7 @@ input {
   </section>
   <script>
     var socket = io({transports: ['websocket']});
-    var messageContainer = document.querySelector('.chat__window');
+    var messageContainer = document.querySelector('.chat');
     socket.on('message', function (data) {
       renderMessage(data);
     });
@@ -95,8 +166,14 @@ input {
       var div = document.createElement('div');
       div.innerHTML = '<span><strong>' + data.nickname + ':</strong> ' + data.message + '</span>';
       messageContainer.insertBefore(div, messageContainer.firstChild);
-      document.querySelector('.chat__greeting').style.display = 'none';
+//      document.querySelector('.chat__greeting').style.display = 'none';
     };
+  </script>
+  <script>
+    var clean = document.querySelector('.controls__clean');
+    clean.addEventListener('click', function () {
+      messageContainer.innerHTML = '';
+    })
   </script>
 </body>
 </html>
