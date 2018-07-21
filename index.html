@@ -15,7 +15,7 @@
   
 .controls {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   box-sizing: border-box;
   width: 80vw;
   min-height: 50px;
@@ -34,13 +34,23 @@
   cursor: pointer;
 }
     
+label {
+  font-family: "Arial", sans-serif;
+}
+    
 .controls__colors-wrap {
+  display: flex;
+  align-items: center;
   margin-right: 20px;      
+}
+    
+.controls__color-pick {
+  margin-left: 10px;      
 }
     
 .controls__clean {
   background-color: transparent;
-  color: #902046;
+  text-transform: uppercase;
 }
     
 .controls__clean:hover {
@@ -141,9 +151,8 @@ input:focus {
      <input class="controls__color-pick" id="color-pick" type="color" name="color-pick" title="Нажми, чтобы выбрать цвет текста" value="#902046">
    </div>
    
-<!--    <button class="controls__color-pick control" type="button" name="color-pick" title="Нажми, чтобы выбрать цвет текста сообщений">Цвет текста</button> -->
-   
-    <button class="controls__clean control" type="button" name="clean">Очистить чат</button>
+    <button class="controls__clean control" type="button" name="clean" title="Нажми, чтобы удалить все сообщения">Очистить</button>
+    
   </div>
   <section class="chat-container">
     <div class="chat__window" id="chat-window">
@@ -164,14 +173,24 @@ input:focus {
       </form>
     </div>
   </section>
+  
   <script>
-    var color = '';
+    var color = '#902046';
     var colorPicker = document.querySelector('.controls__color-pick');
     colorPicker.addEventListener('change', function (evt) {
       color = evt.target.value;
     }, false);
-  </script>
-  <script>
+    
+    var messageTime = '';
+    var getMessageTime = function () {
+      var date = new Date();
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+      messageTime = hours + ':' + minutes + ':' + seconds;
+      return messageTime;
+    };
+  
     var socket = io({transports: ['websocket']});
     var messageContainer = document.querySelector('.chat');
     socket.on('message', function (data) {
@@ -186,13 +205,14 @@ input:focus {
     };
     
     function renderMessage (data) {
+      messageTime = getMessageTime();
       var div = document.createElement('div');
-      div.innerHTML = '<span><strong>' + data.nickname + ':</strong> ' + data.message + '</span>';
+      div.innerHTML = '<span>' + messageTime + ' ' + '<strong>' + data.nickname + ':</strong> ' + data.message + '</span>';
       div.style.color = color;
       messageContainer.insertBefore(div, messageContainer.firstChild);
-//      document.querySelector('.chat__greeting').style.display = 'none';
     };
   </script>
+  
   <script>
     // Очистка чата при нажатии кнопки
     var clean = document.querySelector('.controls__clean');
@@ -200,5 +220,6 @@ input:focus {
       messageContainer.innerHTML = '';
     })
   </script>
+  
 </body>
 </html>
