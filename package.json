@@ -1,0 +1,15 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "Чат с использованиев web-sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Елена Петренко",
+  "license": "ISC",
+  "dependencies": {
+    "escape-html": "^1.0.3",
+    "socketio": "^1.0.0"
+  }
+}
